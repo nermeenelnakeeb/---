@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Clinic - Faculty of Applied Arts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .phone-mockup {
+            width: 375px;
+            height: 812px;
+            border-radius: 40px;
+            border: 12px solid #1e293b;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item.active {
+            color: #38bdf8;
+            border-bottom: 2px solid #38bdf8;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+        }
+        
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background-color: #ef4444;
+            border-radius: 50%;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s forwards;
+        }
+        
+        .slide-out {
+            animation: slideOut 0.3s forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); }
+            to { transform: translateX(100%); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="phone-mockup">
+        <div class="screen relative">
+            <!-- Login Screen (Default) -->
+            <div id="login-screen" class="h-full flex flex-col items-center justify-center p-8">
+                <div class="text-center mb-12">
+                    <div class="w-24 h-24 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-hospital text-white text-4xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold text-blue-400 mb-2">Smart Clinic</h1>
+                    <p class="text-slate-400">Faculty of Applied Arts</p>
+                </div>
+                
+                <div class="w-full max-w-xs">
+                    <div class="card rounded-xl p-6 mb-6">
+                        <h2 class="text-xl font-semibold mb-6 text-center">Welcome Back</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-1">Email</label>
+                                <input type="email" class="w-full bg-slate-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-1">Password</label>
+                                <input type="password" class="w-full bg-slate-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mb-8">
+                        <button onclick="loginAsStudent()" class="btn-primary text-white font-medium rounded-full px-8 py-3 flex items-center">
+                            <i class="fas fa-user-graduate mr-2"></i> Student
+                        </button>
+                        <button onclick="loginAsDoctor()" class="btn-primary text-white font-medium rounded-full px-8 py-3 flex items-center">
+                            <i class="fas fa-user-md mr-2"></i> Doctor
+                        </button>
+                    </div>
+                    
+                    <p class="text-center text-sm text-slate-500">Forgot password? <a href="#" class="text-blue-400">Reset here</a></p>
+                </div>
+            </div>
+            
+            <!-- Student Screens -->
+            <div id="student-screens" class="h-full hidden">
+                <!-- Student Home -->
+                <div id="student-home" class="h-full flex flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Hello, <span class="text-blue-400">Alex</span></h1>
+                                <p class="text-slate-400 text-sm">Welcome to Smart Clinic</p>
+                            </div>
+                            <div class="relative">
+                                <button onclick="toggleNotificationPanel()" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                                    <i class="fas fa-bell text-blue-400"></i>
+                                    <div class="notification-dot"></div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card rounded-xl p-4 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-16 h-16 rounded-xl bg-blue-900 flex items-center justify-center mr-4">
+                                    <i class="fas fa-user-md text-blue-400 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Your Doctor</h3>
+                                    <p class="text-blue-400 text-sm">Dr. Sarah Johnson</p>
+                                    <p class="text-xs text-slate-400">General Physician</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="card rounded-xl p-4 flex flex-col items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mb-2">
+                                    <i class="fas fa-calendar-alt text-blue-400"></i>
+                                </div>
+                                <p class="text-sm font-medium">Appointments</p>
+                            </div>
+                            <div class="card rounded-xl p-4 flex flex-col items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mb-2">
+                                    <i class="fas fa-file-medical text-blue-400"></i>
+                                </div>
+                                <p class="text-sm font-medium">Medical Records</p>
+                            </div>
+                            <div class="card rounded-xl p-4 flex flex-col items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mb-2">
+                                    <i class="fas fa-comments text-blue-400"></i>
+                                </div>
+                                <p class="text-sm font-medium">Chat</p>
+                            </div>
+                            <div class="card rounded-xl p-4 flex flex-col items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mb-2">
+                                    <i class="fas fa-flask text-blue-400"></i>
+                                </div>
+                                <p class="text-sm font-medium">Lab Results</p>
+                            </div>
+                        </div>
+                        
+                        <h2 class="font-bold text-lg mb-4">Upcoming Appointments</h2>
+                        <div class="card rounded-xl p-4 mb-2">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">General Checkup</h3>
+                                    <p class="text-sm text-slate-400">With Dr. Johnson</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-blue-400 font-medium">Tomorrow</p>
+                                    <p class="text-xs text-slate-400">10:30 AM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showStudentScreen('student-home')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Home</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-health')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-heartbeat text-lg mb-1"></i>
+                                <span>Health</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-appointments')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Appointments</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-chat')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Chat</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Student Health Profile -->
+                <div id="student-health" class="h-full hidden flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Health Profile</h1>
+                                <p class="text-slate-400 text-sm">Your medical information</p>
+                            </div>
+                            <button class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                                <i class="fas fa-ellipsis-v text-blue-400"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="card rounded-xl p-6 mb-6">
+                            <div class="flex items-center mb-6">
+                                <div class="w-16 h-16 rounded-full bg-blue-900 flex items-center justify-center mr-4">
+                                    <i class="fas fa-user text-blue-400 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Alex Morgan</h3>
+                                    <p class="text-blue-400 text-sm">Student ID: FA2023-0456</p>
+                                    <p class="text-xs text-slate-400">Faculty of Applied Arts</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <p class="text-xs text-slate-400">Age</p>
+                                    <p class="font-medium">21</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Blood Type</p>
+                                    <p class="font-medium">A+</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Height</p>
+                                    <p class="font-medium">175 cm</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Weight</p>
+                                    <p class="font-medium">68 kg</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 class="font-bold text-lg mb-4">Medical Conditions</h2>
+                        <div class="card rounded-xl p-4 mb-4">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-full bg-red-900 flex items-center justify-center mr-3 mt-1">
+                                    <i class="fas fa-allergies text-red-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Seasonal Allergies</h3>
+                                    <p class="text-sm text-slate-400">Pollen, Dust</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 class="font-bold text-lg mb-4">Recent Lab Results</h2>
+                        <div class="card rounded-xl p-4 mb-2">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Blood Test</h3>
+                                    <p class="text-sm text-slate-400">Completed: 15 Oct 2023</p>
+                                </div>
+                                <button class="text-blue-400 text-sm font-medium">View</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showStudentScreen('student-home')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Home</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-health')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-heartbeat text-lg mb-1"></i>
+                                <span>Health</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-appointments')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Appointments</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-chat')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Chat</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Student Appointments -->
+                <div id="student-appointments" class="h-full hidden flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Appointments</h1>
+                                <p class="text-slate-400 text-sm">Schedule and manage visits</p>
+                            </div>
+                            <button onclick="showNewAppointmentModal()" class="btn-primary text-white font-medium rounded-full px-4 py-2 text-sm">
+                                <i class="fas fa-plus mr-1"></i> New
+                            </button>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="font-bold">Upcoming</h2>
+                                <p class="text-sm text-blue-400">See all</p>
+                            </div>
+                            <div class="card rounded-xl p-4 mb-2">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-medium">General Checkup</h3>
+                                        <p class="text-sm text-slate-400">With Dr. Johnson</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-blue-400 font-medium">Tomorrow</p>
+                                        <p class="text-xs text-slate-400">10:30 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="font-bold">Available Doctors</h2>
+                                <p class="text-sm text-blue-400">See all</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="card rounded-xl p-4 flex flex-col items-center">
+                                    <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mb-2">
+                                        <i class="fas fa-user-md text-blue-400"></i>
+                                    </div>
+                                    <h3 class="font-medium text-sm text-center">Dr. Johnson</h3>
+                                    <p class="text-xs text-slate-400 text-center">General Physician</p>
+                                    <button class="text-blue-400 text-xs mt-2">View Schedule</button>
+                                </div>
+                                <div class="card rounded-xl p-4 flex flex-col items-center">
+                                    <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mb-2">
+                                        <i class="fas fa-user-md text-blue-400"></i>
+                                    </div>
+                                    <h3 class="font-medium text-sm text-center">Dr. Lee</h3>
+                                    <p class="text-xs text-slate-400 text-center">Dermatologist</p>
+                                    <button class="text-blue-400 text-xs mt-2">View Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showStudentScreen('student-home')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Home</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-health')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-heartbeat text-lg mb-1"></i>
+                                <span>Health</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-appointments')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Appointments</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-chat')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Chat</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Student Chat -->
+                <div id="student-chat" class="h-full hidden flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Messages</h1>
+                                <p class="text-slate-400 text-sm">Chat with your doctor</p>
+                            </div>
+                            <button class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                                <i class="fas fa-ellipsis-v text-blue-400"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="card rounded-xl p-4 mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                    <i class="fas fa-user-md text-blue-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="font-medium">Dr. Johnson</h3>
+                                        <p class="text-xs text-slate-400">2h ago</p>
+                                    </div>
+                                    <p class="text-sm text-slate-400 truncate">Your lab results are ready. Let's discuss them in our next appointment.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card rounded-xl p-4 mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                    <i class="fas fa-user-md text-blue-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="font-medium">Clinic Admin</h3>
+                                        <p class="text-xs text-slate-400">1d ago</p>
+                                    </div>
+                                    <p class="text-sm text-slate-400 truncate">Reminder: Your appointment is scheduled for tomorrow at 10:30 AM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showStudentScreen('student-home')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Home</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-health')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-heartbeat text-lg mb-1"></i>
+                                <span>Health</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-appointments')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Appointments</span>
+                            </button>
+                            <button onclick="showStudentScreen('student-chat')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Chat</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor Screens -->
+            <div id="doctor-screens" class="h-full hidden">
+                <!-- Doctor Dashboard -->
+                <div id="doctor-dashboard" class="h-full flex flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Welcome, <span class="text-blue-400">Dr. Johnson</span></h1>
+                                <p class="text-slate-400 text-sm">Today: 5 appointments</p>
+                            </div>
+                            <div class="relative">
+                                <button onclick="toggleNotificationPanel()" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                                    <i class="fas fa-bell text-blue-400"></i>
+                                    <div class="notification-dot"></div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="card rounded-xl p-4 flex flex-col items-center justify-center">
+                                <p class="text-2xl font-bold text-blue-400">5</p>
+                                <p class="text-xs text-slate-400">Today</p>
+                            </div>
+                            <div class="card rounded-xl p-4 flex flex-col items-center justify-center">
+                                <p class="text-2xl font-bold text-blue-400">12</p>
+                                <p class="text-xs text-slate-400">This Week</p>
+                            </div>
+                            <div class="card rounded-xl p-4 flex flex-col items-center justify-center">
+                                <p class="text-2xl font-bold text-blue-400">3</p>
+                                <p class="text-xs text-slate-400">Urgent</p>
+                            </div>
+                        </div>
+                        
+                        <h2 class="font-bold text-lg mb-4">Today's Appointments</h2>
+                        <div class="card rounded-xl p-4 mb-2">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Alex Morgan</h3>
+                                    <p class="text-sm text-slate-400">General Checkup</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-blue-400 font-medium">10:30 AM</p>
+                                    <p class="text-xs text-slate-400">Room 204</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card rounded-xl p-4 mb-2">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Jamie Smith</h3>
+                                    <p class="text-sm text-slate-400">Follow-up</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-blue-400 font-medium">11:15 AM</p>
+                                    <p class="text-xs text-slate-400">Room 204</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 class="font-bold text-lg mb-4 mt-6">Recent Patients</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="card rounded-xl p-4 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-sm">Alex M.</h3>
+                                    <p class="text-xs text-slate-400">Last: 2d ago</p>
+                                </div>
+                            </div>
+                            <div class="card rounded-xl p-4 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-sm">Taylor R.</h3>
+                                    <p class="text-xs text-slate-400">Last: 3d ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showDoctorScreen('doctor-dashboard')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Dashboard</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-patients')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-users text-lg mb-1"></i>
+                                <span>Patients</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-schedule')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Schedule</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-chat')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Messages</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor Patients -->
+                <div id="doctor-patients" class="h-full hidden flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Patients</h1>
+                                <p class="text-slate-400 text-sm">Your current cases</p>
+                            </div>
+                            <button class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                                <i class="fas fa-search text-blue-400"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <input type="text" placeholder="Search patients..." class="w-full bg-slate-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="card rounded-xl p-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-user text-blue-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center">
+                                            <h3 class="font-medium">Alex Morgan</h3>
+                                            <span class="text-xs px-2 py-1 bg-red-900 text-red-400 rounded-full">Urgent</span>
+                                        </div>
+                                        <p class="text-sm text-slate-400">Seasonal Allergies</p>
+                                        <p class="text-xs text-slate-400">Last visit: 2d ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card rounded-xl p-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-user text-blue-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-medium">Taylor Reed</h3>
+                                        <p class="text-sm text-slate-400">Follow-up required</p>
+                                        <p class="text-xs text-slate-400">Last visit: 3d ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card rounded-xl p-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-user text-blue-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-medium">Jamie Smith</h3>
+                                        <p class="text-sm text-slate-400">Routine checkup</p>
+                                        <p class="text-xs text-slate-400">Last visit: 1w ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showDoctorScreen('doctor-dashboard')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Dashboard</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-patients')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-users text-lg mb-1"></i>
+                                <span>Patients</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-schedule')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Schedule</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-chat')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Messages</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor Schedule -->
+                <div id="doctor-schedule" class="h-full hidden flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Schedule</h1>
+                                <p class="text-slate-400 text-sm">Manage your appointments</p>
+                            </div>
+                            <button class="btn-primary text-white font-medium rounded-full px-4 py-2 text-sm">
+                                <i class="fas fa-plus mr-1"></i> Add Slot
+                            </button>
+                        </div>
+                        
+                        <div class="flex overflow-x-auto mb-6 pb-2">
+                            <div class="flex space-x-2">
+                                <button class="px-4 py-2 bg-blue-900 text-blue-400 rounded-full text-sm font-medium">Today</button>
+                                <button class="px-4 py-2 bg-slate-800 text-slate-400 rounded-full text-sm">Mon 23</button>
+                                <button class="px-4 py-2 bg-slate-800 text-slate-400 rounded-full text-sm">Tue 24</button>
+                                <button class="px-4 py-2 bg-slate-800 text-slate-400 rounded-full text-sm">Wed 25</button>
+                                <button class="px-4 py-2 bg-slate-800 text-slate-400 rounded-full text-sm">Thu 26</button>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="card rounded-xl p-4">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-medium">Alex Morgan</h3>
+                                        <p class="text-sm text-slate-400">General Checkup</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-blue-400 font-medium">10:30 AM</p>
+                                        <p class="text-xs text-slate-400">Room 204</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card rounded-xl p-4">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-medium">Jamie Smith</h3>
+                                        <p class="text-sm text-slate-400">Follow-up</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-blue-400 font-medium">11:15 AM</p>
+                                        <p class="text-xs text-slate-400">Room 204</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card rounded-xl p-4 opacity-60">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-medium">Available Slot</h3>
+                                        <p class="text-sm text-slate-400">Open appointment</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-blue-400 font-medium">2:00 PM</p>
+                                        <p class="text-xs text-slate-400">Room 204</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showDoctorScreen('doctor-dashboard')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Dashboard</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-patients')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-users text-lg mb-1"></i>
+                                <span>Patients</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-schedule')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Schedule</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-chat')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Messages</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor Chat -->
+                <div id="doctor-chat" class="h-full hidden flex-col">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold">Messages</h3>
+                                <p class="text-slate-400 text-sm">Communicate with patients</p>
+                            </div>
+                            <button class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                                <i class="fas fa-ellipsis-v text-blue-400"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="card rounded-xl p-4 mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-blue-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="font-medium">Alex Morgan</h3>
+                                        <p class="text-xs text-slate-400">2h ago</p>
+                                    </div>
+                                    <p class="text-sm text-slate-400 truncate">Dr. Johnson, when will my lab results be ready?</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card rounded-xl p-4 mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-blue-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="font-medium">Taylor Reed</h3>
+                                        <p class="text-xs text-slate-400">1d ago</p>
+                                    </div>
+                                    <p class="text-sm text-slate-400 truncate">I'm feeling better after the medication. Should I continue?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Navigation -->
+                    <div class="mt-auto bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-sm border-t border-slate-800 p-4">
+                        <div class="flex justify-around">
+                            <button onclick="showDoctorScreen('doctor-dashboard')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-home text-lg mb-1"></i>
+                                <span>Dashboard</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-patients')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-users text-lg mb-1"></i>
+                                <span>Patients</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-schedule')" class="nav-item flex flex-col items-center text-xs">
+                                <i class="fas fa-calendar text-lg mb-1"></i>
+                                <span>Schedule</span>
+                            </button>
+                            <button onclick="showDoctorScreen('doctor-chat')" class="nav-item active flex flex-col items-center text-xs">
+                                <i class="fas fa-comment text-lg mb-1"></i>
+                                <span>Messages</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notification Panel -->
+            <div id="notification-panel" class="absolute top-0 right-0 w-full h-full bg-slate-900 bg-opacity-90 backdrop-filter backdrop-blur-sm z-20 hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Notifications</h2>
+                        <button onclick="toggleNotificationPanel()" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                            <i class="fas fa-times text-blue-400"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="card rounded-xl p-4">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center mr-3 mt-1">
+                                    <i class="fas fa-calendar-check text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">New Appointment</h3>
+                                    <p class="text-sm text-slate-400">Alex Morgan booked an appointment for tomorrow at 10:30 AM</p>
+                                    <p class="text-xs text-slate-500 mt-1">2 hours ago</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card rounded-xl p-4">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center mr-3 mt-1">
+                                    <i class="fas fa-flask text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Lab Results Ready</h3>
+                                    <p class="text-sm text-slate-400">Blood test results for Taylor Reed are now available</p>
+                                    <p class="text-xs text-slate-500 mt-1">1 day ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- New Appointment Modal -->
+            <div id="new-appointment-modal" class="absolute top-0 right-0 w-full h-full bg-slate-900 bg-opacity-90 backdrop-filter backdrop-blur-sm z-20 hidden">
+                <div class="p-6 h-full flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">New Appointment</h2>
+                        <button onclick="hideNewAppointmentModal()" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                            <i class="fas fa-times text-blue-400"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card rounded-xl p-6 mb-6 flex-1">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-2">Select Doctor</label>
+                                <div class="relative">
+                                    <select class="w-full bg-slate-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                                        <option>Dr. Sarah Johnson</option>
+                                        <option>Dr. Michael Lee</option>
+                                        <option>Dr. Emily Chen</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <i class="fas fa-chevron-down text-slate-500"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-2">Date</label>
+                                <input type="date" class="w-full bg-slate-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-2">Time</label>
+                                <input type="time" class="w-full bg-slate-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-2">Reason</label>
+                                <textarea class="w-full bg-slate-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary text-white font-medium rounded-full px-6 py-3 w-full">
+                        Book Appointment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login functions
+        function loginAsStudent() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('student-screens').classList.remove('hidden');
+            document.getElementById('student-home').classList.remove('hidden');
+            setActiveNav('student-home');
+        }
+        
+        function loginAsDoctor() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('doctor-screens').classList.remove('hidden');
+            document.getElementById('doctor-dashboard').classList.remove('hidden');
+            setActiveNav('doctor-dashboard');
+        }
+        
+        // Student screen navigation
+        function showStudentScreen(screenId) {
+            // Hide all student screens
+            document.querySelectorAll('#student-screens > div').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            
+            // Show the selected screen
+            document.getElementById(screenId).classList.remove('hidden');
+            
+            // Update active nav
+            setActiveNav(screenId);
+        }
+        
+        // Doctor screen navigation
+        function showDoctorScreen(screenId) {
+            // Hide all doctor screens
+            document.querySelectorAll('#doctor-screens > div').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            
+            // Show the selected screen
+            document.getElementById(screenId).classList.remove('hidden');
+            
+            // Update active nav
+            setActiveNav(screenId);
+        }
+        
+        // Set active navigation item
+        function setActiveNav(screenId) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to the current nav item
+            const navItems = document.querySelectorAll([onclick="show${screenId.includes('student') ? 'Student' : 'Doctor'}Screen('${screenId}')"]);
+            navItems.forEach(item => {
+                item.classList.add('active');
+            });
+        }
+        
+        // Notification panel toggle
+        function toggleNotificationPanel() {
+            document.getElementById('notification-panel').classList.toggle('hidden');
+        }
+        
+        // New appointment modal
+        function showNewAppointmentModal() {
+            document.getElementById('new-appointment-modal').classList.remove('hidden');
+        }
+        
+        function hideNewAppointmentModal() {
+            document.getElementById('new-appointment-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
